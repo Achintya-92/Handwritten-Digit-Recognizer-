@@ -1,4 +1,3 @@
-````markdown
 # ✍️ Handwritten Digit Recognizer
 
 A web-based handwritten digit recognition system that uses a **Convolutional Neural Network (CNN)** trained on the **MNIST dataset**.

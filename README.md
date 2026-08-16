@@ -391,7 +391,6 @@ It also helped me understand an important real-world ML problem:
 
 Built as a practical Machine Learning + Web Development project.
 
-````
 
 
 

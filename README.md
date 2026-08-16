@@ -1,33 +1,201 @@
-# Handwritten Digit Recognizer
+````markdown
+# ✍️ Handwritten Digit Recognizer
 
-A handwritten digit recognition project using a **CNN trained on the MNIST dataset**, with a web interface that allows users to draw digits on a canvas and get predictions through a Flask API.
+A web-based handwritten digit recognition system that uses a **Convolutional Neural Network (CNN)** trained on the **MNIST dataset**.
 
-## Project Overview
-
-The project has three main parts:
-
-1. **CNN Model**
-   - TensorFlow / Keras
-   - Trained on MNIST
-   - Input: `28 × 28` grayscale image
-   - Output: digit `0–9`
-
-2. **Flask Backend**
-   - Receives canvas images from the frontend
-   - Decodes Base64 PNG images
-   - Converts and preprocesses the image
-   - Sends the image to the CNN
-   - Returns predicted digit and confidence
-
-3. **Web Frontend**
-   - HTML/CSS/JavaScript
-   - Provides a drawing canvas
-   - Sends the canvas image to the Flask API
-   - Displays the prediction
+Users can draw a digit directly on a web canvas, and the trained model predicts the digit through a **Flask REST API**.
 
 ---
 
-## Project Structure
+## 🚀 Demo
+
+Draw a digit on the canvas:
+
+```text
+        ┌──────────────────┐
+        │                  │
+        │        7         │
+        │                  │
+        └──────────────────┘
+                 ↓
+          Flask REST API
+                 ↓
+             CNN Model
+                 ↓
+          Predicted: 7
+          Confidence: 91.7%
+````
+
+---
+
+## ✨ Features
+
+* 🖊️ Draw digits directly on a web canvas
+* 🤖 CNN-based digit classification
+* 🧠 Trained using the MNIST dataset
+* 🔌 Flask REST API for model inference
+* 📡 JavaScript `fetch()` API communication
+* 🖼️ Base64 image transmission
+* 🔍 Automatic image preprocessing
+* 📏 Image resizing to `28 × 28`
+* 📊 Prediction confidence
+* 🔄 Custom handwritten dataset support
+* 🌐 CORS-enabled frontend/backend communication
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology         | Purpose                    |
+| ------------------ | -------------------------- |
+| Python             | Backend & ML               |
+| TensorFlow / Keras | CNN model                  |
+| NumPy              | Numerical processing       |
+| Pillow             | Image processing           |
+| Flask              | REST API                   |
+| Flask-CORS         | Cross-Origin requests      |
+| HTML               | Web structure              |
+| CSS                | Styling                    |
+| JavaScript         | Canvas & API communication |
+
+---
+
+## 🧠 Model Architecture
+
+The CNN uses the following architecture:
+
+```text
+Input
+28 × 28 × 1
+     │
+     ▼
+Conv2D (32 filters)
+     │
+     ▼
+MaxPooling
+     │
+     ▼
+Conv2D (64 filters)
+     │
+     ▼
+Flatten
+     │
+     ▼
+Dense (128)
+     │
+     ▼
+Dense (10)
+     │
+     ▼
+Softmax
+     │
+     ▼
+Digit 0–9
+```
+
+---
+
+## 📊 MNIST Performance
+
+The initial model achieved approximately:
+
+```text
+MNIST Test Accuracy: 99.1%
+```
+
+Test set:
+
+```text
+10,000 images
+```
+
+Wrong predictions:
+
+```text
+90 images
+```
+
+The confusion matrix was also analyzed to understand which digits were commonly confused.
+
+---
+
+## 🔄 Prediction Pipeline
+
+```text
+User draws digit
+       │
+       ▼
+HTML Canvas
+       │
+       ▼
+canvas.toDataURL()
+       │
+       ▼
+Base64 PNG
+       │
+       ▼
+POST /api/predict
+       │
+       ▼
+Flask Backend
+       │
+       ▼
+Base64 Decode
+       │
+       ▼
+Pillow Image
+       │
+       ▼
+Grayscale
+       │
+       ▼
+Crop Digit
+       │
+       ▼
+Resize → 28 × 28
+       │
+       ▼
+Normalize → 0–1
+       │
+       ▼
+CNN Model
+       │
+       ▼
+Prediction
+       │
+       ▼
+Frontend
+```
+
+---
+
+## 📡 API
+
+### `POST /api/predict`
+
+The frontend sends the canvas image as a Base64 encoded PNG.
+
+### Request
+
+```json
+{
+  "image": "data:image/png;base64,..."
+}
+```
+
+### Response
+
+```json
+{
+  "message": "Image Prediction successful.",
+  "predicted_digit": 7,
+  "confidence": 0.9171
+}
+```
+
+---
+
+## 📁 Project Structure
 
 ```text
 Handwritten Digit Recognizer/
@@ -39,6 +207,9 @@ Handwritten Digit Recognizer/
 │   ├── index.html
 │   ├── style.css
 │   └── script.js
+│
+├── src/
+│   └── ...
 │
 ├── data/
 │   └── my_digits/
@@ -53,428 +224,178 @@ Handwritten Digit Recognizer/
 │       ├── 8/
 │       └── 9/
 │
-├── mnist_cnn.keras
-├── train.py
-└── README.md
-````
-
----
-
-# Current Model
-
-The current CNN is trained on MNIST.
-
-Basic architecture:
-
-```text
-Input: 28 × 28 × 1
-        ↓
-Conv2D(32)
-        ↓
-MaxPooling
-        ↓
-Conv2D(64)
-        ↓
-Flatten
-        ↓
-Dense(128)
-        ↓
-Dense(10, Softmax)
-```
-
-The original model achieved approximately:
-
-```text
-MNIST Test Accuracy ≈ 99.1%
+├── README.md
+├── .gitignore
+└── requirements.txt
 ```
 
 ---
 
-# Web Prediction Pipeline
+## 🧪 Custom Handwritten Dataset
 
-The frontend creates a PNG image from the canvas.
+The project also supports adding personal handwritten images.
+
+Images are organized according to their labels:
 
 ```text
-Canvas
-   ↓
-canvas.toDataURL()
-   ↓
-Base64 PNG
-   ↓
-POST /api/predict
-   ↓
-Flask
-   ↓
-Base64 Decode
-   ↓
-PIL Image
-   ↓
-Grayscale
-   ↓
-Crop handwritten digit
-   ↓
-Resize to 28 × 28
-   ↓
-Normalize 0–1
-   ↓
-CNN
-   ↓
-Prediction
+data/my_digits/
+│
+├── 0/
+├── 1/
+├── 2/
+├── 3/
+├── 4/
+├── 5/
+├── 6/
+├── 7/
+├── 8/
+└── 9/
 ```
 
-Example API response:
+For example:
 
-```json
-{
-    "message": "Image Prediction successful.",
-    "predicted_digit": 7,
-    "confidence": 0.9171
-}
+```text
+data/my_digits/9/
+├── 9_01.png
+├── 9_02.png
+├── 9_03.png
+└── ...
+```
+
+The folder name represents the digit label.
+
+The plan is to combine these images with MNIST and retrain/fine-tune the CNN so that it performs better on real user handwriting.
+
+---
+
+## ⚙️ Installation
+
+Clone the repository:
+
+```bash
+git clone <your-repository-url>
+cd "Handwritten Digit Recognizer"
+```
+
+Create a virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+Activate it on Windows:
+
+```powershell
+.venv\Scripts\activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
 ```
 
 ---
 
-# API
+## ▶️ Run the Backend
 
-## POST `/api/predict`
-
-The frontend sends:
-
-```json
-{
-    "image": "data:image/png;base64,..."
-}
+```bash
+python api/app.py
 ```
 
-The backend processes the image and returns:
-
-```json
-{
-    "predicted_digit": 7,
-    "confidence": 0.9171
-}
-```
-
----
-
-# CORS
-
-The frontend and backend run on different ports during development.
-
-Frontend:
-
-```text
-http://127.0.0.1:5500
-```
-
-Backend:
+The Flask server will run at:
 
 ```text
 http://127.0.0.1:5000
 ```
 
-Therefore, CORS is enabled in Flask.
+---
+
+## 🌐 Run the Frontend
+
+Open the `Web/index.html` using a local development server.
+
+For example, VS Code Live Server:
+
+```text
+http://127.0.0.1:5500
+```
+
+The frontend communicates with:
+
+```text
+http://127.0.0.1:5000/api/predict
+```
 
 ---
 
-# Custom Handwritten Dataset
+## 🔐 Git & Data
 
-The original MNIST model performs very well on MNIST, but handwritten digits created by a real user can have significantly different shapes.
+Personal handwritten images and local environment files are excluded using `.gitignore`.
 
-For example, different handwritten versions of `9` can look like:
-
-```text
-    ○
-     \
-      \
-```
-
-or:
+Ignored files include:
 
 ```text
-    ___
-   /   \
-       |
-       |
-```
-
-Some valid `9` images can therefore be confused with `8`, `4`, `5`, `7`, `3`, etc.
-
-To improve performance on personal handwriting, a custom dataset will be added.
-
----
-
-# Custom Dataset Structure
-
-Each digit has its own folder.
-
-```text
+.venv/
 data/
-└── my_digits/
-    ├── 0/
-    │   ├── 0_01.png
-    │   ├── 0_02.png
-    │   └── ...
-    │
-    ├── 1/
-    ├── 2/
-    ├── 3/
-    ├── 4/
-    ├── 5/
-    ├── 6/
-    ├── 7/
-    ├── 8/
-    └── 9/
-```
-
-The folder name is the label.
-
-For example:
-
-```text
-my_digits/9/9_01.png
-```
-
-means:
-
-```text
-label = 9
+*.keras
+.env
+__pycache__/
 ```
 
 ---
 
-# Custom Image Preprocessing
+## 📚 What I Learned
 
-Custom images will be converted to the same format expected by the CNN:
-
-```text
-PNG
- ↓
-Grayscale
- ↓
-28 × 28
- ↓
-Pixel values / 255
- ↓
-Shape: (28, 28, 1)
-```
-
-The preprocessing must be consistent with the training and prediction pipeline.
-
----
-
-# Retraining Plan
-
-The next stage of the project is to combine:
-
-```text
-MNIST Training Data
-        +
-Custom Handwritten Images
-        ↓
-Combined Dataset
-        ↓
-Train CNN
-        ↓
-Validate
-        ↓
-Evaluate on untouched MNIST Test Set
-```
-
-The MNIST test set must remain separate.
-
-This allows us to compare:
-
-```text
-Old Model
-    vs
-Retrained Model
-```
-
----
-
-# Important Evaluation Rule
-
-Do not evaluate the model using images that were used during training.
-
-We will maintain:
-
-```text
-Training data
-    ↓
-Used to train model
-
-Validation data
-    ↓
-Used during training to monitor performance
-
-Test data
-    ↓
-Never used for training
-```
-
-This helps determine whether the model actually generalizes.
-
----
-
-# Planned Training Pipeline
-
-The custom images will eventually be loaded using Python:
-
-```python
-x_custom, y_custom = load_custom_images(
-    "data/my_digits"
-)
-```
-
-MNIST will be loaded using:
-
-```python
-(x_train, y_train), (x_test, y_test) = \
-    tf.keras.datasets.mnist.load_data()
-```
-
-Then the training datasets will be combined:
-
-```python
-x_combined = np.concatenate(
-    [x_train, x_custom],
-    axis=0
-)
-
-y_combined = np.concatenate(
-    [y_train, y_custom],
-    axis=0
-)
-```
-
-The test set will remain untouched.
-
----
-
-# Data Augmentation
-
-The model may use augmentation to make it more robust to handwriting variations.
-
-Possible augmentations:
-
-```text
-Rotation
-Translation
-Zoom
-```
-
-For example:
-
-```python
-data_augmentation = tf.keras.Sequential([
-    layers.RandomRotation(0.05),
-    layers.RandomTranslation(0.08, 0.08),
-    layers.RandomZoom(0.08)
-])
-```
-
-Augmentation will be used carefully so that the digit's identity is not changed.
-
----
-
-# Model Saving
-
-After retraining:
-
-```python
-model.save("mnist_cnn_custom.keras")
-```
-
-The Flask backend can then load:
-
-```python
-model = tf.keras.models.load_model(
-    "mnist_cnn_custom.keras"
-)
-```
-
----
-
-# Current Development Status
-
-* [x] MNIST dataset loaded
-* [x] CNN trained
-* [x] MNIST evaluation completed
-* [x] Flask backend created
-* [x] `/api/predict` endpoint created
-* [x] CORS issue resolved
-* [x] Canvas image sent from JavaScript
-* [x] Base64 image decoded in Flask
-* [x] Image converted to grayscale
-* [x] Image cropped
-* [x] Image resized to `28 × 28`
-* [x] CNN prediction working
-* [x] Prediction and confidence returned to frontend
-* [x] Wrong MNIST predictions analyzed
-* [ ] Custom handwritten dataset creation
-* [ ] Custom PNG loading
-* [ ] MNIST + custom dataset combination
-* [ ] Retraining
-* [ ] Evaluation of retrained model
-* [ ] Testing custom canvas handwriting
-* [ ] Final frontend polishing
-
----
-
-# Important Learning Goal
-
-The purpose of this project is not only to build a working digit recognizer.
-
-It is also to understand the complete machine-learning pipeline:
+This project helped me understand the complete machine-learning application pipeline:
 
 ```text
 Dataset
    ↓
 Preprocessing
    ↓
-Training
+CNN Training
    ↓
-Validation
-   ↓
-Testing
+Evaluation
    ↓
 Model Saving
    ↓
-API
+Flask API
    ↓
 Frontend
    ↓
-Real-world Prediction
+Real-time Prediction
 ```
 
-A major focus is understanding why a model can achieve very high MNIST accuracy but still perform poorly on handwritten digits drawn by a user.
+It also helped me understand an important real-world ML problem:
+
+> A model can achieve very high accuracy on a benchmark dataset like MNIST but still perform differently on images coming from a real user interface.
 
 ---
 
-# Future Improvements
+## 🔮 Future Improvements
 
-Possible future improvements:
+* [ ] Add more personal handwriting samples
+* [ ] Combine MNIST with custom handwritten data
+* [ ] Fine-tune the CNN on personal handwriting
+* [ ] Improve canvas image preprocessing
+* [ ] Improve digit centering and scaling
+* [ ] Add prediction visualization
+* [ ] Improve UI/UX
+* [ ] Deploy the application
 
-* Add more custom handwritten samples
-* Balance custom samples across all digits
-* Improve image centering
-* Match canvas preprocessing with MNIST preprocessing
-* Fine-tune the pretrained MNIST model on custom handwriting
-* Analyze confusion matrix after retraining
-* Add prediction confidence to UI
-* Add loading state
-* Add error handling
-* Deploy frontend and backend
+---
+
+## 👨‍💻 Author
+
+**Lovejot Singh**
+
+Built as a practical Machine Learning + Web Development project.
 
 ````
 
-Save this as:
 
-```text
-README.md
-````
 
-**Current next step remains Step 1:** create `data/my_digits/0` through `data/my_digits/9` and put your handwritten images into the appropriate folders. When you return, we’ll continue from **Step 2**, not restart anything.
-#   H a n d w r i t t e n - D i g i t - R e c o g n i z e r -  
- 
+
+
+

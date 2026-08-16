@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Handwritten Digit Recognizer</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <h1>Handwritten Digit Recognizer</h1>
+
+<div class="card">
+
+    <div class="canvas-section">
+        <p class="instruction">Draw a digit from 0 to 9</p>
+
+        <canvas id="canvas" width="280" height="280"></canvas>
+
+        <div class="buttons">
+            <button id="clear" class="secondary-btn">
+                Clear
+            </button>
+
+            <button id="predict" class="primary-btn">
+                Predict
+            </button>
+        </div>
+    </div>
+
+    <div class="prediction-section">
+
+        <div class="result-box">
+            <span class="label">Prediction</span>
+            <span id="result">—</span>
+        </div>
+
+        <div class="result-box">
+            <span class="label">Confidence</span>
+            <span id="confidence">—</span>
+        </div>
+
+    </div>
+
+</div>
+    <script src="script.js"></script>
+
+</body>
+</html>

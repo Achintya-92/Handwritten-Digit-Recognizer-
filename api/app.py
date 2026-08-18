@@ -62,7 +62,7 @@ def predict():
     image = image.resize((28, 28))
 
 
-    image.save("received_image.png")
+    # image.save("received_image.png")
 
     image_array = np.array(image)
 
